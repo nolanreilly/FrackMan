@@ -1,61 +1,62 @@
 #ifndef ACTOR_H_
 #define ACTOR_H_
-
 #include "GraphObject.h"
 #include "GameConstants.h"
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
-//#include "GameWorld.h"
+class StudentWorld;
 
 class Dirt: public GraphObject {
 public:
     Dirt(int x, int y): GraphObject(IID_DIRT, x, y, right, 0.25) {
         setVisible(true);
+        m_doneDiggity = false;
+    }
+    bool getDoneDiggity() const {
+        return m_doneDiggity;
+    }
+    void setDoneDiggity(bool doneDiggity) {
+        m_doneDiggity = doneDiggity;
     }
 private:
+    bool m_doneDiggity;
 };
 
 class Actor: public GraphObject {
 public:
-    Actor(int IID, int x, int y): GraphObject(IID, x, y) {
+    Actor(int IID, int x, int y, StudentWorld* p_world): GraphObject(IID, x, y), m_accessGetKey(p_world) {
+        setVisible(true);
         m_health = 100;
     }
-    int getHealth() {
-        return m_health;
-    }
-
-    virtual void doSomething() = 0;
-private:
-    int m_health;
-};
-
-class FrackMan: public Actor {
-public:
-    FrackMan(): Actor(IID_PLAYER, 30, 60) {
-        setVisible(true);
-    }
-    ~FrackMan() {
+    ~Actor() {
         setVisible(false);
     }
-    virtual void doSomething();
+    int getHealth() const {
+        return m_health;
+    }
+    StudentWorld* accessGetKey() const {
+        return m_accessGetKey;
+    }
+    virtual void doSomething() = 0;
     
-    // getKey() can be used to determine if the user has hit a key on the keyboard to move the
-    // player or to fire. This method returns true if the user hit a key during the current tick, and
-    // false otherwise (if the user did not hit any key during this tick). The only argument to this
-    // method is a variable that will be filled in with the key that was pressed by the user (if any
-    // key was pressed). If the player does hit a key, the argument will be set to one of the
-    // following values (constants defined in GameConstants.h):
-            // KEY_PRESS_LEFT
-            // KEY_PRESS_RIGHT
-            // KEY_PRESS_UP
-            // KEY_PRESS_DOWN
-            // KEY_PRESS_SPACE
-            // KEY_PRESS_ESCAPE
-            // KEY_PRESS_TAB
-            // ‘z’
-            // ‘Z’
+    // virtual void canMove(int x, int y) = 0;
+    
 private:
-    // Why am I able to see the GameWorld class?
+    int m_health;
+    StudentWorld* m_accessGetKey;
+};
+
+class FrackMan: public Actor
+{
+public:
+    FrackMan(StudentWorld* p_world): Actor(IID_PLAYER, 30, 60, p_world)
+    {}
+    ~FrackMan()
+    {}
+    virtual void doSomething();
+    // virtual void canMove(int x, int y);
+    
+    void clearDirt(int x, int y, char dir);
 };
 #endif // ACTOR_H_
