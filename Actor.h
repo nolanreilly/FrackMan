@@ -31,6 +31,7 @@ public:
     }
     ~Actor() {
         setVisible(false);
+        
     }
     int getHealth() const {
         return m_health;
@@ -40,7 +41,7 @@ public:
     }
     virtual void doSomething() = 0;
     
-    // virtual void canMove(int x, int y) = 0;
+    virtual bool canMove(int x, int y) = 0;
     
 private:
     int m_health;
@@ -55,7 +56,7 @@ public:
     ~FrackMan()
     {}
     virtual void doSomething();
-    // virtual void canMove(int x, int y);
+    virtual bool canMove(int x, int y);
     
     void clearDirt(int x, int y, char dir);
 };

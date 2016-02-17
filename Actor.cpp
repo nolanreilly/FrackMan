@@ -10,30 +10,44 @@ void FrackMan::doSomething() {
         switch (keyValue) {
             case KEY_PRESS_UP:
                 setDirection(GraphObject::up);
-                moveTo(getX(), getY() + 1);
-                clearDirt(getX(), getY() + 3, 'u');
+                if(canMove(getX(), getY() + 1)) {
+                    moveTo(getX(), getY() + 1);
+                    clearDirt(getX(), getY() + 3, 'u');
+                }
                 break;
             case KEY_PRESS_DOWN:
                 setDirection(GraphObject::down);
-                moveTo(getX(), getY() - 1);
-                clearDirt(getX(), getY(), 'd');
+                if(canMove(getX(), getY() - 1)) {
+                    moveTo(getX(), getY() - 1);
+                    clearDirt(getX(), getY(), 'd');
+                }
                 break;
             case KEY_PRESS_LEFT:
                 setDirection(GraphObject::left);
-                moveTo(getX() - 1, getY());
-                clearDirt(getX(), getY(), 'l');
+                if(canMove(getX() - 1, getY())) {
+                    moveTo(getX() - 1, getY());
+                    clearDirt(getX(), getY(), 'l');
+                }
                 break;
             case KEY_PRESS_RIGHT:
                 setDirection(GraphObject::right);
-                moveTo(getX() + 1, getY());
-                clearDirt(getX() + 3, getY(), 'r');
+                if(canMove(getX() + 1, getY())) {
+                    moveTo(getX() + 1, getY());
+                    clearDirt(getX() + 3, getY(), 'r');
+                }
                 break;
         }
     }
 }
 
+bool FrackMan::canMove(int x, int y) {
+    if(x >= 0 && x <= 60 && y >= 0 && y <= 60)
+        return true;
+    return false;
+}
+
 void FrackMan::clearDirt(int x, int y, char dir) {
-    if((!accessGetKey()->getDirtArr(x, y)->getDoneDiggity())) {
+    if(accessGetKey()->getDirtArr(x, y)) {
         //accessGetKey()->getDirtArr(x, y)->setDoneDiggity(true);
         switch(dir) {
             case 'u':
