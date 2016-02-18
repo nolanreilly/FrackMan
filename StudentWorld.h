@@ -22,9 +22,9 @@ public:
         frackptr = new FrackMan(this);
         
         for(int i = 0; i < 64; i++) {
-            for(int j = 0; j < 60; j++) {
+            for(int j = 0; j < 64; j++) {
                 dirtArray[i][j] = new Dirt(i, j);
-                if(i >= 30 && i <= 33)
+                if((i >= 30 && i <= 33) || (j >= 60 && j <= 63))
                     dirtArray[i][j]->setVisible(false);
             }
         }
@@ -46,14 +46,19 @@ public:
 	}
 
 	virtual void cleanUp()
-	{}
+	{
+        delete frackptr;
+        for(int i = 0; i < gameObjects.size(); i++) {
+            delete gameObjects[i];
+        }
+    }
     
     Dirt* getDirtArr(int x, int y) {
         return dirtArray[x][y];
     }
 private:
     std::vector<GraphObject*> gameObjects;
-    Dirt* dirtArray[64][60];
+    Dirt* dirtArray[64][64];
     FrackMan* frackptr;
 };
 
