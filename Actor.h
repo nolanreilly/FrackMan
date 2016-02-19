@@ -11,16 +11,10 @@ class Dirt: public GraphObject {
 public:
     Dirt(int x, int y): GraphObject(IID_DIRT, x, y, right, 0.25) {
         setVisible(true);
-        m_doneDiggity = false;
     }
-    bool getDoneDiggity() const {
-        return m_doneDiggity;
-    }
-    void setDoneDiggity(bool doneDiggity) {
-        m_doneDiggity = doneDiggity;
-    }
+    ~Dirt() {}
+    void checkDirt(int x, int y);
 private:
-    bool m_doneDiggity;
 };
 
 class Actor: public GraphObject {
@@ -31,7 +25,6 @@ public:
     }
     ~Actor() {
         setVisible(false);
-        
     }
     int getHealth() const {
         return m_health;
@@ -53,11 +46,12 @@ class FrackMan: public Actor
 public:
     FrackMan(StudentWorld* p_world): Actor(IID_PLAYER, 30, 60, p_world)
     {}
-    ~FrackMan()
-    {}
+    ~FrackMan();
+    
     virtual void doSomething();
     virtual bool canMove(int x, int y);
-    
+    void deleteDirt(int x, int y, char vert_horiz);
     void clearDirt(int x, int y, char dir);
+    
 };
 #endif // ACTOR_H_

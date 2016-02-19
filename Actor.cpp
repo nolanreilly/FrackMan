@@ -4,6 +4,10 @@
 
 #include "StudentWorld.h"
 
+FrackMan::~FrackMan() {
+    delete accessGetKey()->getFrack();
+}
+
 void FrackMan::doSomething() {
     int keyValue;
     if(accessGetKey()->getKey(keyValue)) {
@@ -46,38 +50,38 @@ bool FrackMan::canMove(int x, int y) {
     return false;
 }
 
-void FrackMan::clearDirt(int x, int y, char dir) {
-    if(accessGetKey()->getDirtArr(x, y)) {
-        //accessGetKey()->getDirtArr(x, y)->setDoneDiggity(true);
-        switch(dir) {
-            case 'u':
-                accessGetKey()->getDirtArr(x, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+1, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+2, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+3, y)->setVisible(false);
-                break;
-            case 'd':
-                accessGetKey()->getDirtArr(x, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+1, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+2, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x+3, y)->setVisible(false);
-                break;
-            case 'l':
-                accessGetKey()->getDirtArr(x, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+1)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+2)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+3)->setVisible(false);
-                break;
-            case 'r':
-                accessGetKey()->getDirtArr(x, y)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+1)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+2)->setVisible(false);
-                accessGetKey()->getDirtArr(x, y+3)->setVisible(false);
-                break;
+void FrackMan::deleteDirt(int x, int y, char vert_horiz) {
+    if(accessGetKey()->getDirt(x, y) != nullptr) {
+        for(int i = 0; i < 4; i++) {
+            switch(vert_horiz) {
+                case 'v':
+                    delete accessGetKey()->getDirt(x + i, y);
+                    accessGetKey()->setDirtNull(x + i, y);
+                    break;
+                case 'h':
+                    delete accessGetKey()->getDirt(x, y + i);
+                    accessGetKey()->setDirtNull(x, y + i);
+                    break;
+            }
         }
-
     }
 }
 
-// void FrackMan::canMove(int x, int y) {}
-
+void FrackMan::clearDirt(int x, int y, char dir) {
+    if(accessGetKey()->getDirt(x, y)) {
+        switch(dir) {
+            case 'u':
+                deleteDirt(x, y, 'v');
+                break;
+            case 'd':
+                deleteDirt(x, y, 'v');
+                break;
+            case 'l':
+                deleteDirt(x, y, 'h');
+                break;
+            case 'r':
+                deleteDirt(x, y, 'h');
+                break;
+        }
+    }
+}
